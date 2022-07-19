@@ -1,18 +1,19 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerObserverManager : MonoBehaviour
+public static class PlayerObserverManager
 {
-    // Start is called before the first frame update
-    void Start()s
-    {
-        
-    }
+    public static Action<int> OnPlayerCoinsChanged;
 
-    // Update is called once per frame
-    void Update()
+    public static void PlayerCoinsChanged(int value)
     {
-        
+        OnPlayerCoinsChanged?.Invoke(value);
     }
+    
+
+
+
+
 }

@@ -24,14 +24,21 @@ public class GameManager : MonoBehaviour
         //SceneManager.LoadScene(locationToLoad, LoadSceneMode.Additive);
         SceneManager.LoadSceneAsync(locationToLoad, LoadSceneMode.Additive).completed += operation =>
         {
+            Scene locationScene = default;
+            for (int i = 0; i < SceneManager.sceneCount; i++)
+            {
+                locationScene = SceneManager.GetSceneAt(i);
+            }
+            if (locationScene != default) SceneManager.SetActiveScene(locationScene);
+            
             Vector3 startPosition = GameObject.Find("PlayerStart").transform.position;
             
             Instantiate(playerAndCameraPrefab, startPosition, Quaternion.identity);
             
         }; 
 
-        Vector3 startPosition = GameObject.Find("PlayerStart").transform.position;
-        Instantiate(playerAndCameraPrefab, startPosition, Quaternion.identity);
+        //Vector3 startPosition = GameObject.Find("PlayerStart").transform.position;
+        //Instantiate(playerAndCameraPrefab, startPosition, Quaternion.identity);
     }
 
     // Update is called once per frame
