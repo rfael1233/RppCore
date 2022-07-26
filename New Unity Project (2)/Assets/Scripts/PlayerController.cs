@@ -8,6 +8,7 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
     public int coins = 0;
+    public int coletaveis = 0;
     
     public float moveSpeed;
     public float maxVelocity;
@@ -133,6 +134,14 @@ public class PlayerController : MonoBehaviour
             PlayerObserverManager.OnPlayerCoinsChanged(coins);
             Destroy(other.gameObject);
         }
+
+        if (other.CompareTag("ObjColetaveis"))
+        {
+            coletaveis++;
+            PlayerObserverManager.OnPlayerColetaveisChanged(coletaveis);
+            Destroy(other.gameObject);
+        }
+        
 
     }
 }

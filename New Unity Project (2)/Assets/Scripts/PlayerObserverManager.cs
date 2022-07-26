@@ -12,6 +12,13 @@ public static class PlayerObserverManager
         OnPlayerCoinsChanged?.Invoke(value);
     }
     
+    public static Action<int> OnPlayerColetaveisChanged;
+
+    public static void PlayerColetaveisChanged(int value)
+    {
+        OnPlayerColetaveisChanged?.Invoke(value);
+    }
+    
 
 
 

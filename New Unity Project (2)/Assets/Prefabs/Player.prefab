@@ -157,7 +157,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   coins: 0
-  coinText: {fileID: 0}
+  coletaveis: 0
   moveSpeed: 1000
   maxVelocity: 15
   rayDistance: 0.75
