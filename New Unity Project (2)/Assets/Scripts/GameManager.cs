@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,6 +6,10 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+    public static GameManager Instance;
+    
+    
+    
     [SerializeField]
     private GameObject playerAndCameraPrefab;
 
@@ -13,11 +18,44 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] 
     private string guiScene;
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(this.gameObject);
+        }
+        else
+        {
+            Destroy(this.gameObject);
+        }
+        
+    }
+
+    private void Start()
+    {
+        if (SceneManager.GetActiveScene().name == "Initialization")
+        {
+            StartGameFromInitialization();
+        }
+        else
+        {
+            StartGameFromLevel();
+        }
+    }
+
+    private void StartGameFromLevel()
+    {
+        SceneManager.LoadScene(guiScene, LoadSceneMode.Additive);
+        Vector3 startPosition = GameObject.Find("PlayerStart").transform.position;
+
+        Instantiate(playerAndCameraPrefab, startPosition, Quaternion.identity);
+    }
     
-    
-    
+
     // Start is called before the first frame update
-    void Start()
+    void StartGameFromInitialization()
     {
         DontDestroyOnLoad(this.gameObject);
         SceneManager.LoadScene(guiScene);
