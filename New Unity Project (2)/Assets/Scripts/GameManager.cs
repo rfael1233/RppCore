@@ -4,9 +4,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+public enum GameState
+{
+    Start, Play, GameOver, Victory, Ending
+}
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
+    public GameState gameState;
     
     
     
@@ -51,11 +56,24 @@ public class GameManager : MonoBehaviour
         Vector3 startPosition = GameObject.Find("PlayerStart").transform.position;
 
         Instantiate(playerAndCameraPrefab, startPosition, Quaternion.identity);
+        gameState = GameState.Play;
     }
-    
+
+    private void StartGameFromInitialization()
+    {
+        SceneManager.LoadScene("Splash");
+        gameState = GameState.Start;
+    }
+
+    public void LoadMenu()
+    {
+        SceneManager.LoadScene("MainMenu");
+        gameState = GameState.Start;
+    }
+
 
     // Start is called before the first frame update
-    void StartGameFromInitialization()
+    public void StartGame()
     {
         DontDestroyOnLoad(this.gameObject);
         SceneManager.LoadScene(guiScene);
@@ -74,6 +92,8 @@ public class GameManager : MonoBehaviour
             Instantiate(playerAndCameraPrefab, startPosition, Quaternion.identity);
             
         }; 
+        gameState = GameState.Play;
+        
 
         //Vector3 startPosition = GameObject.Find("PlayerStart").transform.position;
         //Instantiate(playerAndCameraPrefab, startPosition, Quaternion.identity);
@@ -83,5 +103,24 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         
+    }
+
+
+    public void CallVictory()
+    {
+        SceneManager.LoadScene("Victory", LoadSceneMode.Additive);
+        gameState = GameState.Victory;
+    }
+
+    public void CallGameOver()
+    {
+        SceneManager.LoadScene("GameOver", LoadSceneMode.Additive);
+        gameState = GameState.GameOver;
+    }
+
+    public void LoadEnding()
+    {
+        SceneManager.LoadScene("Ending");
+        gameState = GameState.Ending;
     }
 }

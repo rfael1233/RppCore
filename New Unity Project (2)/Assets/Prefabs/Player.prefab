@@ -156,6 +156,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 716d9a0bdd1ffd54091b5fb9c87ef366, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  initianTime: 10
   coins: 0
   coletaveis: 0
   moveSpeed: 1000
