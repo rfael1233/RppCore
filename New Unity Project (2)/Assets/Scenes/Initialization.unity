@@ -152,6 +152,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb04efc9e9fd2e349b408e55335220bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameState: 0
   playerAndCameraPrefab: {fileID: 3356962721440709913, guid: 6842265aa23be1e46a37f95972e75873, type: 3}
   locationToLoad: FaseOne
   guiScene: GUI
