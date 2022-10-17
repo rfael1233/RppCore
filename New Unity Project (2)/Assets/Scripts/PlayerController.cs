@@ -7,8 +7,8 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
-    
-    public int coins = 0;
+    public int maxHealth = 100;
+    private int coins = 0;
     public int coletaveis = 0;
     
     public float moveSpeed;
@@ -25,7 +25,7 @@ public class PlayerController : MonoBehaviour
 
     private Vector2 _moveInput;
     private bool _isGrounded;
-    
+    private int _currentHealth;
 
     
 
@@ -44,12 +44,16 @@ public class PlayerController : MonoBehaviour
 
         // delegar do action triggered no player input
         _playerInput.onActionTriggered += OnActionTriggered;
+        _currentHealth = maxHealth;
+        
     }
 
     private void OnDisable()
     {
         // retirando a atribuição ao delegante
         _playerInput.onActionTriggered -= OnActionTriggered;
+
+        
     }
 
     private void OnActionTriggered(InputAction.CallbackContext obj)
@@ -147,7 +151,36 @@ public class PlayerController : MonoBehaviour
             PlayerObserverManager.OnPlayerColetaveisChanged(coletaveis);
             Destroy(other.gameObject);
         }
+
+        if (other.CompareTag("FinishDoor"))
+        {
+            
+            GameManager.Instance.PlayerReachFinishDoor();
+        }
         
 
+    }
+
+    public void TakeDamage(int damage)
+    {
+        _currentHealth -= damage;
+        if (_currentHealth <= 0)
+        {
+            _currentHealth = 0;
+        }
+    }
+
+    public void HealHealth(int heal)
+    {
+        _currentHealth += heal;
+        if (_currentHealth >= maxHealth) _currentHealth = maxHealth;
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Spikes"))
+        {
+            TakeDamage(5);
+        }
     }
 }

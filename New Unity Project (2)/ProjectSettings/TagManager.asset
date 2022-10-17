@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Coin
   - ObjColetaveis
+  - FinishDoor
+  - Spikes
   layers:
   - Default
   - TransparentFX

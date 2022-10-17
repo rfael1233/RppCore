@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 using UnityEngine.SceneManagement;
 
 public enum GameState
@@ -24,6 +25,11 @@ public class GameManager : MonoBehaviour
     [SerializeField] 
     private string guiScene;
 
+    [SerializeField] 
+    private GameModeSO gameMode;
+
+    private float _currentTime;
+    
     private void Awake()
     {
         if (Instance == null)
@@ -38,6 +44,22 @@ public class GameManager : MonoBehaviour
         
     }
 
+    private void OnEnable()
+    {
+        PlayerObserverManager.OnPlayerCoinsChanged += OnPlayerCoinsChanged;
+        gameMode.OnGameStateChanged += OnGameStateChanged;
+    }
+
+    
+
+
+    private void OnDisable()
+    {
+        PlayerObserverManager.OnPlayerCoinsChanged -= OnPlayerCoinsChanged;
+        gameMode.OnGameStateChanged -= OnGameStateChanged;
+    }
+
+
     private void Start()
     {
         if (SceneManager.GetActiveScene().name == "Initialization")
@@ -50,6 +72,16 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private void Update()
+    {
+        if (gameState == GameState.Play)
+        {
+            _currentTime += Time.deltaTime;
+            gameMode.UpdateGameState(intValue:0 , _currentTime);
+
+        }
+    }
+
     private void StartGameFromLevel()
     {
         SceneManager.LoadScene(guiScene, LoadSceneMode.Additive);
@@ -57,6 +89,8 @@ public class GameManager : MonoBehaviour
 
         Instantiate(playerAndCameraPrefab, startPosition, Quaternion.identity);
         gameState = GameState.Play;
+        gameMode.InitializeMode();
+        _currentTime = 0;
     }
 
     private void StartGameFromInitialization()
@@ -93,18 +127,16 @@ public class GameManager : MonoBehaviour
             
         }; 
         gameState = GameState.Play;
-        
+        gameMode.InitializeMode();
+        _currentTime = 0;
+
 
         //Vector3 startPosition = GameObject.Find("PlayerStart").transform.position;
         //Instantiate(playerAndCameraPrefab, startPosition, Quaternion.identity);
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
+    
 
     public void CallVictory()
     {
@@ -123,4 +155,26 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene("Ending");
         gameState = GameState.Ending;
     }
+    private void OnPlayerCoinsChanged(int obj)
+    {
+       gameMode.UpdateGameState(obj);
+    }
+    private void OnGameStateChanged(GameState obj)
+    {
+        switch (obj)
+        {
+            case GameState.Victory :
+                CallVictory();
+                break;
+            case GameState.GameOver:
+                CallGameOver();
+                break;
+        }
+    }
+
+    public void PlayerReachFinishDoor()
+    {
+        gameMode.UpdateGameState(intValue:0, floatValue:0, boolVolue:true);
+    }
+    
 }

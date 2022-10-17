@@ -1,18 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using UnityEditor;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Assets/GameModes/CollectCoins",fileName = "CollectCoinsGameModeSO")]
-public class CollectCoinsGameMode : ScriptableObject, IGameMode<int>
+public class CollectCoinsGameMode : GameModeSO
 {
     public int coinsToWin;
-
-    public GameState gameState;
+    public float timeToWin;
     
-    
-    public void UpdateWinState(int value)
+    /// <summary>
+    /// Atualiza o estado do tipe de jogo Collect Coin
+    /// </summary>
+    /// <param name="intValue">quantidade de moedas coletadas</param>
+    /// <param name="floatValue">tempo que se passou desde o inicio da partida</param>
+    public override void UpdateGameState([Optional] int intValue, [Optional] float floatValue, [Optional] bool boolValue)
     {
-        
+        if (intValue >= coinsToWin) GameState = GameState.Victory;
+
+        if (floatValue >= timeToWin) GameState = GameState.GameOver;
     }
 }
